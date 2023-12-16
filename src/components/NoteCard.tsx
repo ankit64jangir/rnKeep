@@ -6,9 +6,11 @@ import {INoteItem, NavigationType} from '../types';
 
 type NoteCardTypes = {
   note: INoteItem;
+  selectMultipleNote: any;
+  multipleNote: INoteItem[];
 };
 
-const NoteCard = ({note}: NoteCardTypes) => {
+const NoteCard = ({note, selectMultipleNote, multipleNote}: NoteCardTypes) => {
   const navigation = useNavigation<NavigationType<'AddNote'>>();
 
   const openNote = () => {
@@ -16,11 +18,24 @@ const NoteCard = ({note}: NoteCardTypes) => {
   };
 
   return (
-    <TouchableOpacity activeOpacity={0.5} onPress={openNote}>
+    <TouchableOpacity
+      activeOpacity={0.5}
+      onPress={openNote}
+      onLongPress={selectMultipleNote}>
       <View
         style={[
           styles.container,
-          {backgroundColor: note.bg ? note.bg : theme.bg},
+          {
+            backgroundColor: multipleNote.some(n => n.id === note.id)
+              ? theme.selected
+              : note.bg
+              ? note.bg
+              : theme.bg,
+            borderColor: multipleNote.some(n => n.id === note.id)
+              ? theme.selected
+              : theme.gray300,
+          },
+          // {backgroundColor: note.bg ? note.bg : theme.bg},
         ]}>
         <Text style={styles.title}>{note.title}</Text>
         <Text style={styles.note}>{note.note}</Text>
@@ -39,7 +54,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingVertical: 16,
     paddingHorizontal: 12,
-    borderColor: theme.gray300,
+
     // shadowColor: theme.gray900,
     // shadowOffset: {
     //   width: 0,

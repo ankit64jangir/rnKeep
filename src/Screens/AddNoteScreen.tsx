@@ -27,8 +27,6 @@ const AddNoteScreen = ({navigation, route}: ViewNoteScreenNavigationProps) => {
     updatedAt: new Date(),
   });
 
-  console.log(note?.createdAt.toString());
-
   const addNote = () => {
     setNotes([noteData, ...notes]);
     setNoteData({
@@ -90,21 +88,7 @@ const AddNoteScreen = ({navigation, route}: ViewNoteScreenNavigationProps) => {
         onPress={note ? updateNote : addNote}
       />
 
-      {note && (
-        <NoteAction note={note} deleteNote={deleteNote} />
-        // <View style={styles.actionContainer}>
-        //   <PaintIcon size={28} color={theme.gray500} />
-        //   <Text>
-        //     {note.createdAt.toString() !== note.updatedAt.toString()
-        //       ? `Edited • ${dayjs(note.updatedAt).format('MMM D, YYYY')}`
-        //       : dayjs(note.createdAt).format('MMM D, YYYY')}
-        //   </Text>
-        //   {/* <Text>{note?.createdAt.toString()}</Text> */}
-        //   <TouchableOpacity onPress={deleteNote}>
-        //     <DeleteIcon size={28} color={theme.gray500} />
-        //   </TouchableOpacity>
-        // </View>
-      )}
+      {note && <NoteAction note={note} deleteNote={deleteNote} />}
     </SafeAreaView>
   );
 };
