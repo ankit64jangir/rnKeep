@@ -4,6 +4,8 @@ import NewNoteFAB from '../components/core/NewNoteFAB';
 import {theme} from '../theme';
 import useNotesStore from '../stores/useNotesStore';
 import NoteCard from '../components/NoteCard';
+import NoNote from '../components/core/NoNote';
+import {INoteItem} from '../types';
 
 const HomeScreen = () => {
   const {notes} = useNotesStore();
@@ -13,11 +15,18 @@ const HomeScreen = () => {
     [],
   );
 
+  const keyExtractor = useCallback((note: INoteItem) => note.id, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
         <NewNoteFAB />
-        <FlatList data={notes} renderItem={renderItem} />
+        <FlatList
+          data={notes}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          ListEmptyComponent={<NoNote />}
+        />
       </View>
     </SafeAreaView>
   );

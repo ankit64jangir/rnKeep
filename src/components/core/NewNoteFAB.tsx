@@ -2,8 +2,8 @@ import React, {memo} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 import {PlusIcon} from '../../utils/icons';
-import {NavigationType} from '../../navigation/AppNavigation';
 import {theme} from '../../theme';
+import {NavigationType} from '../../types';
 
 const NewNoteFAB = () => {
   const navigation = useNavigation<NavigationType<'AddNote'>>();
@@ -12,7 +12,7 @@ const NewNoteFAB = () => {
     <View style={styles.container}>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('AddNote');
+          navigation.navigate('AddNote', {});
         }}>
         <View style={styles.plusContainer}>
           <PlusIcon size={32} color="#ffffff" />

@@ -1,23 +1,9 @@
 import React from 'react';
-import {CompositeNavigationProp} from '@react-navigation/native';
-import {
-  createNativeStackNavigator,
-  NativeStackNavigationProp,
-} from '@react-navigation/native-stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {memo} from 'react';
 import HomeScreen from '../Screens/HomeScreen';
 import AddNoteScreen from '../Screens/AddNoteScreen';
-
-export type StackNavigatorParamList = {
-  Home: undefined;
-  AddNote: undefined;
-};
-
-export type NavigationType<RouteName extends keyof StackNavigatorParamList> =
-  CompositeNavigationProp<
-    NativeStackNavigationProp<StackNavigatorParamList, RouteName>,
-    NativeStackNavigationProp<StackNavigatorParamList>
-  >;
+import {StackNavigatorParamList} from '../types';
 
 const Stack = createNativeStackNavigator<StackNavigatorParamList>();
 
@@ -33,7 +19,7 @@ const AppNavigation = () => {
           name="AddNote"
           component={AddNoteScreen}
           options={{
-            animation: 'fade_from_bottom',
+            animation: 'slide_from_bottom',
           }}
         />
       </Stack.Group>

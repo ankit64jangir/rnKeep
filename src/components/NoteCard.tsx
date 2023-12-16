@@ -1,21 +1,31 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {theme} from '../theme';
+import {useNavigation} from '@react-navigation/native';
+import {INoteItem, NavigationType} from '../types';
 
 type NoteCardTypes = {
   note: INoteItem;
 };
 
 const NoteCard = ({note}: NoteCardTypes) => {
+  const navigation = useNavigation<NavigationType<'AddNote'>>();
+
+  const openNote = () => {
+    navigation.navigate('AddNote', {note});
+  };
+
   return (
-    <View
-      style={[
-        styles.container,
-        {backgroundColor: note.bg ? note.bg : theme.bg},
-      ]}>
-      <Text style={styles.title}>{note.title}</Text>
-      <Text style={styles.note}>{note.note}</Text>
-    </View>
+    <TouchableOpacity activeOpacity={0.5} onPress={openNote}>
+      <View
+        style={[
+          styles.container,
+          {backgroundColor: note.bg ? note.bg : theme.bg},
+        ]}>
+        <Text style={styles.title}>{note.title}</Text>
+        <Text style={styles.note}>{note.note}</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
