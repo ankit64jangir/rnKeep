@@ -6,6 +6,11 @@ import {theme} from './src/theme';
 import {NavigationContainer} from '@react-navigation/native';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import AppNavigation from './src/navigation/AppNavigation';
+import {enableFreeze} from 'react-native-screens';
+import {initializeNotesStore} from './src/stores/useNotesStore';
+
+enableFreeze(true);
+initializeNotesStore();
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
