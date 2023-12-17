@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   FlatList,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
 import NewNoteFAB from '../components/core/NewNoteFAB';
@@ -57,6 +58,18 @@ const HomeScreen = () => {
     setMultipleNote([]);
   };
 
+  const deleteMultipleNoteAlert = () => {
+    Alert.alert('Are you sure you want to delete this note?', '', [
+      {
+        text: 'No',
+        onPress: () => {
+          setMultipleNote([]);
+        },
+      },
+      {text: 'Yes', onPress: deleteMultipleNote},
+    ]);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
@@ -68,7 +81,9 @@ const HomeScreen = () => {
               onPress={() => setMultipleNote([])}>
               <CrossIcon size={28} color={theme.gray500} />
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.5} onPress={deleteMultipleNote}>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={deleteMultipleNoteAlert}>
               <DeleteIcon size={28} color={theme.gray500} />
             </TouchableOpacity>
           </View>

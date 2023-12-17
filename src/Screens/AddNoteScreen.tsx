@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   Platform,
+  Alert,
 } from 'react-native';
 import React, {useCallback, useRef, useState} from 'react';
 import {theme} from '../theme';
@@ -73,6 +74,16 @@ const AddNoteScreen = ({navigation, route}: ViewNoteScreenNavigationProps) => {
     navigation.goBack();
   };
 
+  const deleteNoteAlert = () => {
+    Alert.alert('Are you sure you want to delete this note?', '', [
+      {
+        text: 'No',
+        onPress: () => {},
+      },
+      {text: 'Yes', onPress: deleteNote},
+    ]);
+  };
+
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <SafeAreaView style={[styles.container, {backgroundColor: noteData.bg}]}>
@@ -109,7 +120,7 @@ const AddNoteScreen = ({navigation, route}: ViewNoteScreenNavigationProps) => {
 
         <NoteAction
           note={note}
-          deleteNote={deleteNote}
+          deleteNote={deleteNoteAlert}
           handlePresentModalPress={handlePresentModalPress}
         />
 
