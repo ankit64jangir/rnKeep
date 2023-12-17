@@ -111,6 +111,7 @@ const AddNoteScreen = ({navigation, route}: ViewNoteScreenNavigationProps) => {
         <View style={styles.textContainer}>
           <TextInput
             placeholder="Title"
+            placeholderTextColor={'gray'}
             style={styles.title}
             multiline
             autoFocus={note ? false : true}
@@ -119,6 +120,7 @@ const AddNoteScreen = ({navigation, route}: ViewNoteScreenNavigationProps) => {
           />
           <TextInput
             placeholder="Note"
+            placeholderTextColor={'gray'}
             style={styles.note}
             multiline
             value={noteData.note}
@@ -179,9 +181,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
+    color: theme.gray900,
   },
   note: {
     fontSize: 16,
     marginTop: Platform.OS === 'android' ? 0 : 14,
+    color: theme.gray900,
   },
 });

@@ -21,7 +21,7 @@ const NoteAction = ({
       </TouchableOpacity>
       {note && (
         <Text style={styles.text}>
-          {dayjs(note.createdAt) !== dayjs(note.updatedAt)
+          {dayjs(note.createdAt).toString() !== dayjs(note.updatedAt).toString()
             ? `Edited • ${dayjs(note?.updatedAt).format('MMM D, YYYY')}`
             : dayjs(note?.createdAt).format('MMM D, YYYY')}
         </Text>
