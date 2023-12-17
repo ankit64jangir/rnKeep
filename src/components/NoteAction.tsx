@@ -11,8 +11,8 @@ const NoteAction = ({
   handlePresentModalPress,
 }: {
   note?: INoteItem;
-  deleteNote: any;
-  handlePresentModalPress: any;
+  deleteNote: () => void;
+  handlePresentModalPress: () => void;
 }) => {
   return (
     <View style={styles.actionContainer}>

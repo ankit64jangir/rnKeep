@@ -8,6 +8,7 @@ import {
   TextInput,
   Platform,
   Alert,
+  Keyboard,
 } from 'react-native';
 import React, {useCallback, useRef, useState} from 'react';
 import {theme} from '../theme';
@@ -26,6 +27,7 @@ const AddNoteScreen = ({navigation, route}: ViewNoteScreenNavigationProps) => {
 
   // callbacks
   const handlePresentModalPress = useCallback(() => {
+    Keyboard.dismiss();
     bottomSheetModalRef.current?.present();
   }, []);
 
@@ -85,14 +87,20 @@ const AddNoteScreen = ({navigation, route}: ViewNoteScreenNavigationProps) => {
   };
 
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <SafeAreaView style={[styles.container, {backgroundColor: noteData.bg}]}>
+    <GestureHandlerRootView style={styles.container}>
+      <SafeAreaView
+        style={[
+          styles.container,
+          {backgroundColor: noteData.bg, paddingBottom: 20, paddingTop: 8},
+        ]}>
         <View style={styles.appBarContainer}>
           <View style={styles.appBarLeft}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <BackArrowIcon size={28} color="black" />
             </TouchableOpacity>
-            <Text style={styles.appBarText}>{note ? '' : 'Add New Note'}</Text>
+            <Text style={styles.appBarText}>
+              {note ? 'Update Note' : 'Add New Note'}
+            </Text>
           </View>
           <TouchableOpacity onPress={note ? updateNote : addNote}>
             <View style={styles.appBarRight}>
@@ -130,6 +138,7 @@ const AddNoteScreen = ({navigation, route}: ViewNoteScreenNavigationProps) => {
             handleCloseModalPress={handleCloseModalPress}
             noteData={noteData}
             setNoteData={setNoteData}
+            note={note}
           />
         </BottomSheetModalProvider>
       </SafeAreaView>

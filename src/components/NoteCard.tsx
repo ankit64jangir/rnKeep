@@ -6,7 +6,7 @@ import {INoteItem, NavigationType} from '../types';
 
 type NoteCardTypes = {
   note: INoteItem;
-  selectMultipleNote: any;
+  selectMultipleNote: () => void;
   multipleNote: INoteItem[];
 };
 

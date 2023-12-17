@@ -6,12 +6,14 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import ColorPicker from 'react-native-wheel-color-picker';
 import {theme} from '../theme';
 import {CrossIcon} from '../utils/icons';
+import {INoteItem} from '../types';
 
 type ColorPickerBottomSheetTypes = {
   bottomSheetModalRef: any;
   setNoteData: any;
-  noteData: any;
-  handleCloseModalPress: any;
+  noteData: INoteItem;
+  handleCloseModalPress: () => void;
+  note?: INoteItem;
 };
 
 const ColorPickerBottomSheet = ({
@@ -19,6 +21,7 @@ const ColorPickerBottomSheet = ({
   noteData,
   setNoteData,
   handleCloseModalPress,
+  note,
 }: ColorPickerBottomSheetTypes) => {
   const snapPoints = useMemo(() => ['60%', '60%'], []);
   return (
@@ -36,14 +39,14 @@ const ColorPickerBottomSheet = ({
         handleIndicatorStyle={{
           display: 'none',
         }}>
-        <TouchableOpacity onPress={handleCloseModalPress}>
+        <TouchableOpacity onPress={handleCloseModalPress} style={{height: 32}}>
           <View style={styles.cross}>
             <CrossIcon size={32} color={theme.gray900} />
           </View>
         </TouchableOpacity>
         <View style={styles.colorPickerContainer}>
           <ColorPicker
-            color={theme.bg}
+            color={note?.bg ? note?.bg : theme.bg}
             onColorChange={c => setNoteData({...noteData, bg: c})}
           />
         </View>

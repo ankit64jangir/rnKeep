@@ -3,8 +3,8 @@ import {
   StyleSheet,
   SafeAreaView,
   FlatList,
-  TouchableOpacity,
   Alert,
+  Text,
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
 import NewNoteFAB from '../components/core/NewNoteFAB';
@@ -13,11 +13,28 @@ import useNotesStore from '../stores/useNotesStore';
 import NoteCard from '../components/NoteCard';
 import NoNote from '../components/core/NoNote';
 import {INoteItem} from '../types';
-import {CrossIcon, DeleteIcon} from '../utils/icons';
+import HomeHeader from '../components/HomeHeader';
 
 const HomeScreen = () => {
   const {notes, setNotes} = useNotesStore();
   const [multipleNote, setMultipleNote] = useState<INoteItem[]>([]);
+
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearchChange = (e: any) => {
+    setSearchTerm(e);
+  };
+
+  const filteredNotes = notes.filter(note => {
+    const titleMatch = note.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const noteMatch = note.note
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+
+    return titleMatch || noteMatch;
+  });
 
   const selectMultipleNote = useCallback(
     (note: INoteItem) => {
@@ -59,7 +76,7 @@ const HomeScreen = () => {
   };
 
   const deleteMultipleNoteAlert = () => {
-    Alert.alert('Are you sure you want to delete this note?', '', [
+    Alert.alert('Are you sure you want to delete these note?', '', [
       {
         text: 'No',
         onPress: () => {
@@ -74,25 +91,29 @@ const HomeScreen = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
         <NewNoteFAB />
-        {multipleNote.length !== 0 && (
-          <View style={styles.header}>
-            <TouchableOpacity
-              activeOpacity={0.5}
-              onPress={() => setMultipleNote([])}>
-              <CrossIcon size={28} color={theme.gray500} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              activeOpacity={0.5}
-              onPress={deleteMultipleNoteAlert}>
-              <DeleteIcon size={28} color={theme.gray500} />
-            </TouchableOpacity>
-          </View>
-        )}
+
+        <HomeHeader
+          multipleNote={multipleNote}
+          deleteMultipleNoteAlert={deleteMultipleNoteAlert}
+          setMultipleNote={setMultipleNote}
+          handleSearchChange={handleSearchChange}
+        />
+
         <FlatList
-          data={notes}
+          data={filteredNotes}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
-          ListEmptyComponent={<NoNote />}
+          ListEmptyComponent={
+            filteredNotes.length === 0 && searchTerm.length !== 0 ? (
+              <View style={styles.noSearchResult}>
+                <Text style={styles.noSearchResultText}>
+                  No search results found!!!
+                </Text>
+              </View>
+            ) : (
+              <NoNote />
+            )
+          }
         />
       </View>
     </SafeAreaView>
@@ -106,11 +127,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.bg,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  noSearchResult: {
+    marginTop: 16,
     alignItems: 'center',
-    marginBottom: 10,
-    paddingHorizontal: 12,
+  },
+  noSearchResultText: {
+    fontSize: 16,
+    color: theme.gray900,
   },
 });
