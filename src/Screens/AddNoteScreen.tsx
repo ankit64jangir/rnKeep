@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   Button,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import {theme} from '../theme';
@@ -109,6 +110,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 10,
     fontWeight: '600',
+    color: theme.gray900,
   },
   textContainer: {
     marginTop: 16,
@@ -119,6 +121,6 @@ const styles = StyleSheet.create({
   },
   note: {
     fontSize: 16,
-    marginTop: 14,
+    marginTop: Platform.OS === 'android' ? 0 : 14,
   },
 });
