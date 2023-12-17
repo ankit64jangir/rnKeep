@@ -38,7 +38,7 @@ const HomeScreen = () => {
   const renderItem = useCallback(
     ({item}: {item: INoteItem}) => (
       <NoteCard
-        key={item.title}
+        key={item.id}
         note={item}
         selectMultipleNote={() => selectMultipleNote(item)}
         multipleNote={multipleNote}

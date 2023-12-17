@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   View,
   Text,
@@ -5,18 +6,32 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  Button,
   Platform,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {theme} from '../theme';
-import {BackArrowIcon} from '../utils/icons';
+import {BackArrowIcon, TickIcon} from '../utils/icons';
 import useNotesStore from '../stores/useNotesStore';
 import {generateRandomId} from '../utils/constants';
 import {INoteItem, ViewNoteScreenNavigationProps} from '../types';
 import NoteAction from '../components/NoteAction';
+import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import ColorPickerBottomSheet from '../components/ColorPickerBottomSheet';
 
 const AddNoteScreen = ({navigation, route}: ViewNoteScreenNavigationProps) => {
+  // ref
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  // callbacks
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  const handleCloseModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.close();
+  }, []);
+
   const {note} = route.params || {};
   const {notes, setNotes} = useNotesStore();
   const [noteData, setNoteData] = useState<INoteItem>({
@@ -59,38 +74,55 @@ const AddNoteScreen = ({navigation, route}: ViewNoteScreenNavigationProps) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.appBarContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <BackArrowIcon size={28} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.appBarText}>{note ? '' : 'Add New Note'}</Text>
-      </View>
-      <View style={styles.textContainer}>
-        <TextInput
-          placeholder="Title"
-          style={styles.title}
-          multiline
-          autoFocus={note ? false : true}
-          value={noteData.title}
-          onChangeText={value => setNoteData({...noteData, title: value})}
-        />
-        <TextInput
-          placeholder="Note"
-          style={styles.note}
-          multiline
-          value={noteData.note}
-          onChangeText={value => setNoteData({...noteData, note: value})}
-        />
-      </View>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <SafeAreaView style={[styles.container, {backgroundColor: noteData.bg}]}>
+        <View style={styles.appBarContainer}>
+          <View style={styles.appBarLeft}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <BackArrowIcon size={28} color="black" />
+            </TouchableOpacity>
+            <Text style={styles.appBarText}>{note ? '' : 'Add New Note'}</Text>
+          </View>
+          <TouchableOpacity onPress={note ? updateNote : addNote}>
+            <View style={styles.appBarRight}>
+              <TickIcon size={32} color={theme.gray900} />
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.textContainer}>
+          <TextInput
+            placeholder="Title"
+            style={styles.title}
+            multiline
+            autoFocus={note ? false : true}
+            value={noteData.title}
+            onChangeText={value => setNoteData({...noteData, title: value})}
+          />
+          <TextInput
+            placeholder="Note"
+            style={styles.note}
+            multiline
+            value={noteData.note}
+            onChangeText={value => setNoteData({...noteData, note: value})}
+          />
+        </View>
 
-      <Button
-        title={note ? 'Update' : 'Add'}
-        onPress={note ? updateNote : addNote}
-      />
+        <NoteAction
+          note={note}
+          deleteNote={deleteNote}
+          handlePresentModalPress={handlePresentModalPress}
+        />
 
-      {note && <NoteAction note={note} deleteNote={deleteNote} />}
-    </SafeAreaView>
+        <BottomSheetModalProvider>
+          <ColorPickerBottomSheet
+            bottomSheetModalRef={bottomSheetModalRef}
+            handleCloseModalPress={handleCloseModalPress}
+            noteData={noteData}
+            setNoteData={setNoteData}
+          />
+        </BottomSheetModalProvider>
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 };
 
@@ -105,6 +137,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  appBarLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  appBarRight: {
+    marginRight: 4,
   },
   appBarText: {
     fontSize: 16,

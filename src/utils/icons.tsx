@@ -83,3 +83,17 @@ export function BlubIcon({size, color}: IconProps) {
     </Svg>
   );
 }
+
+export function TickIcon({size, color}: IconProps) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <Path
+        d="M18 7L9.42857 17L6 13"
+        stroke={color}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+}

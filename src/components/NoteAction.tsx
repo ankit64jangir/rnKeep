@@ -5,18 +5,32 @@ import {theme} from '../theme';
 import {DeleteIcon, PaintIcon} from '../utils/icons';
 import dayjs from 'dayjs';
 
-const NoteAction = ({note, deleteNote}: {note: INoteItem; deleteNote: any}) => {
+const NoteAction = ({
+  note,
+  deleteNote,
+  handlePresentModalPress,
+}: {
+  note?: INoteItem;
+  deleteNote: any;
+  handlePresentModalPress: any;
+}) => {
   return (
     <View style={styles.actionContainer}>
-      <PaintIcon size={28} color={theme.gray500} />
-      <Text style={styles.text}>
-        {note.createdAt.toString() !== note.updatedAt.toString()
-          ? `Edited • ${dayjs(note.updatedAt).format('MMM D, YYYY')}`
-          : dayjs(note.createdAt).format('MMM D, YYYY')}
-      </Text>
-      <TouchableOpacity onPress={deleteNote}>
-        <DeleteIcon size={28} color={theme.gray500} />
+      <TouchableOpacity onPress={handlePresentModalPress}>
+        <PaintIcon size={28} color={theme.gray500} />
       </TouchableOpacity>
+      {note && (
+        <Text style={styles.text}>
+          {dayjs(note.createdAt) !== dayjs(note.updatedAt)
+            ? `Edited • ${dayjs(note?.updatedAt).format('MMM D, YYYY')}`
+            : dayjs(note?.createdAt).format('MMM D, YYYY')}
+        </Text>
+      )}
+      {note && (
+        <TouchableOpacity onPress={deleteNote}>
+          <DeleteIcon size={28} color={theme.gray500} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
